@@ -2,6 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -30,6 +31,12 @@ module.exports = {
                     'css-loader',
                     'stylus-loader'],
             },
+            {
+              //archivos png
+              test: /\.png/,
+              type: 'asset/resource',
+            }
+            
             
           ]
   },
@@ -40,5 +47,13 @@ module.exports = {
       filename: './index.html',
     }),
     new miniCssExtractPlugin(),
-  ],
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname , "src" , "assets/images"), // CARPETA A MOVER AL DIST
+          to: "assets/images" // RUTA FINAL DEL DIST
+        },
+      ]
+    }),
+  ]
 };
