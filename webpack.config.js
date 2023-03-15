@@ -1,6 +1,7 @@
 //path is a node module that allows us to work with file paths in a cross-platform way (Windows, Mac, Linux)
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
@@ -20,8 +21,16 @@ module.exports = {
               exclude: /node_modules/,
               use: {
                 loader: 'babel-loader',
-              }            
-            }
+              },          
+            },
+            {
+              //archivos css y stylus
+              test: /\.css|.styl$/i,
+              use: [miniCssExtractPlugin.loader, 
+                    'css-loader',
+                    'stylus-loader'],
+            },
+            
           ]
   },
   plugins: [
@@ -29,6 +38,7 @@ module.exports = {
       inject: true,
       template: './public/index.html',
       filename: './index.html',
-    })
+    }),
+    new miniCssExtractPlugin(),
   ],
 };
