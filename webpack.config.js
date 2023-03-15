@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),   // establece la ubicación del archivo de salida (el bundle) generado por     Webpack en un directorio específico (dist) dentro del proyecto.
     filename: 'main.js',
+    assetModuleFilename: 'assets/images/[hash][ext][query]',
   },
   resolve: {
     extensions: ['.js'],                      // extensiones que va a leer webpack
@@ -26,7 +27,7 @@ module.exports = {
             },
             {
               //archivos css y stylus
-              test: /\.css|.styl$/i,
+              test: /\.css$|\.styl$/,
               use: [miniCssExtractPlugin.loader, 
                     'css-loader',
                     'stylus-loader'],
@@ -35,9 +36,21 @@ module.exports = {
               //archivos png
               test: /\.png/,
               type: 'asset/resource',
+            },
+            {
+              test: /\.(woff|woff2)$/,
+              use: {
+                loader: 'url-loader',
+                options: {
+                  limit: 10000,
+                  mimetype: "application/font-woff",
+                  name: "[name].[ext]",
+                  outputPath: "./assets/fonts/",
+                  publicPath: "./assets/fonts/",
+                  esModule: false,
+                },
+              }
             }
-            
-            
           ]
   },
   plugins: [
